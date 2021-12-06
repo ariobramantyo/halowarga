@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/obscure.dart';
 import 'package:halowarga/views/signup_page.dart';
+import 'package:halowarga/views/warga/nav_bar_warga.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -94,7 +95,7 @@ class LoginPage extends StatelessWidget {
                 )),
             SizedBox(height: 94),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => Get.to(() => NavBarWarga()),
               child: Text(
                 'Login',
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
