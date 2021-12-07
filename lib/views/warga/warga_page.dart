@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 
 class WargaPage extends StatelessWidget {
@@ -85,9 +86,9 @@ class WargaPage extends StatelessWidget {
                 itemCount: 15,
                 itemBuilder: (context, index) {
                   return Container(
-                    height: 45,
+                    height: 50,
                     width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,11 +104,9 @@ class WargaPage extends StatelessWidget {
                             ),
                             SizedBox(width: 10),
                             Container(
-                              width: 200,
+                              width: Get.width / 2,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Lorem Ipsum',
@@ -115,11 +114,13 @@ class WargaPage extends StatelessWidget {
                                         fontSize: 13,
                                         fontWeight: FontWeight.w500),
                                   ),
+                                  SizedBox(height: 2),
                                   Text(
-                                    'Lorem ipsum dolor sit amet',
+                                    'Lorem ipsum dolor sit amet Lorem ipsum dolor',
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                     style: TextStyle(
+                                        height: 1,
                                         color: AppColor.secondaryText,
                                         fontSize: 13),
                                   )
@@ -129,7 +130,7 @@ class WargaPage extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'Warga',
+                          'warga',
                           style: TextStyle(
                               color: AppColor.secondaryText, fontSize: 13),
                         )

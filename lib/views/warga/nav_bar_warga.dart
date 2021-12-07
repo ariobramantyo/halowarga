@@ -24,9 +24,9 @@ class NavBarWarga extends StatelessWidget {
     return Obx(() => Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
+            selectedFontSize: 12,
             selectedItemColor: AppColor.mainColor,
             unselectedItemColor: AppColor.secondaryText,
-            iconSize: 30,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
               BottomNavigationBarItem(

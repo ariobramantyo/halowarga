@@ -94,18 +94,21 @@ class LoginPage extends StatelessWidget {
                   ],
                 )),
             SizedBox(height: 94),
-            ElevatedButton(
-              onPressed: () => Get.to(() => NavBarWarga()),
-              child: Text(
-                'Login',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
-              ),
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(353, 56),
-                primary: AppColor.mainColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                elevation: 0,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ElevatedButton(
+                onPressed: () => Get.to(() => NavBarWarga()),
+                child: Text(
+                  'Login',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                ),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(353, 56),
+                  primary: AppColor.mainColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  elevation: 0,
+                ),
               ),
             ),
             SizedBox(height: 25),

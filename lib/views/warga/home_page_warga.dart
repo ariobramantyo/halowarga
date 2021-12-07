@@ -2,15 +2,71 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/views/warga/detail_tagihan_warga.dart';
+import 'package:halowarga/views/warga/halo_lapor_warga.dart';
+import 'package:halowarga/views/warga/laporan_keuangan_warga.dart';
 
 class HomePageWarga extends StatelessWidget {
   HomePageWarga({Key? key}) : super(key: key);
 
-  final List<Map<String, dynamic>> _menuIcon = [
-    {'icon': Icons.shield, 'nama': 'Tagihan\nKeamanan'},
-    {'icon': Icons.cleaning_services, 'nama': 'Tagihan\nKebersihan'},
-    {'icon': Icons.money, 'nama': 'Tagihan\nIuran'},
-    {'icon': Icons.show_chart, 'nama': 'Laporan\nKeuangan'}
+  Widget _menuIcon(Widget nextPage, IconData icon, String title) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => nextPage);
+      },
+      child: Container(
+        width: 80,
+        child: Column(
+          children: [
+            Container(
+              height: 56,
+              width: 56,
+              decoration: BoxDecoration(
+                  color: AppColor.white,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                  child: Icon(
+                icon,
+                size: 28,
+                color: AppColor.mainColor,
+              )),
+            ),
+            SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: AppColor.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  final List<Map<String, dynamic>> _menuIconList = [
+    {
+      'icon': Icons.verified_user,
+      'nama': 'Tagihan\nKeamanan',
+      'nextPage': DetailTagihanWarga()
+    },
+    {
+      'icon': Icons.cleaning_services,
+      'nama': 'Tagihan\nKebersihan',
+      'nextPage': DetailTagihanWarga()
+    },
+    {
+      'icon': Icons.money,
+      'nama': 'Tagihan\nIuran',
+      'nextPage': DetailTagihanWarga()
+    },
+    {
+      'icon': Icons.show_chart,
+      'nama': 'Laporan\nKeuangan',
+      'nextPage': LaporanKeuanganWarga()
+    }
   ];
 
   @override
@@ -24,30 +80,20 @@ class HomePageWarga extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           "Carlos",
                           style: TextStyle(
                               color: AppColor.white,
                               fontSize: 24,
+                              height: 1,
                               fontWeight: FontWeight.w600),
                         ),
-                        Text(
-                          "Selamat pagi",
-                          style: TextStyle(color: AppColor.white, fontSize: 11),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
                         Text(
                           "Rp.23.000.000",
                           style: TextStyle(
@@ -55,55 +101,39 @@ class HomePageWarga extends StatelessWidget {
                               fontSize: 17,
                               fontWeight: FontWeight.w600),
                         ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Selamat pagi",
+                          style: TextStyle(
+                              color: AppColor.white, fontSize: 11, height: 1),
+                        ),
                         Text(
                           "RT 03 Kelurahan Pesalakan",
                           style: TextStyle(color: AppColor.white, fontSize: 11),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: _menuIcon
-                      .map((menuIcon) => GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: 75,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 56,
-                                    width: 56,
-                                    decoration: BoxDecoration(
-                                        color: AppColor.white,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Center(
-                                        child: Icon(
-                                      menuIcon['icon'],
-                                      size: 28,
-                                      color: AppColor.mainColor,
-                                    )),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    menuIcon['nama'],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: AppColor.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _menuIcon(DetailTagihanWarga(), Icons.verified_user,
+                          'Tagihan\nKeamanan'),
+                      _menuIcon(DetailTagihanWarga(), Icons.cleaning_services,
+                          'Tagihan\nKebersihan'),
+                      _menuIcon(
+                          DetailTagihanWarga(), Icons.money, 'Tagihan\nIuran'),
+                      _menuIcon(LaporanKeuanganWarga(), Icons.show_chart,
+                          'Laporan\nKeuangan')
+                    ]),
               ),
               Expanded(
                 child: Container(
@@ -247,16 +277,19 @@ class HomePageWarga extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                    color: AppColor.mainColor,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.white,
+                              GestureDetector(
+                                onTap: () => Get.to(() => HaloLaporWarga()),
+                                child: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                      color: AppColor.mainColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
