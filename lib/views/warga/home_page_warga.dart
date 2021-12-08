@@ -46,28 +46,28 @@ class HomePageWarga extends StatelessWidget {
     );
   }
 
-  final List<Map<String, dynamic>> _menuIconList = [
-    {
-      'icon': Icons.verified_user,
-      'nama': 'Tagihan\nKeamanan',
-      'nextPage': DetailTagihanWarga()
-    },
-    {
-      'icon': Icons.cleaning_services,
-      'nama': 'Tagihan\nKebersihan',
-      'nextPage': DetailTagihanWarga()
-    },
-    {
-      'icon': Icons.money,
-      'nama': 'Tagihan\nIuran',
-      'nextPage': DetailTagihanWarga()
-    },
-    {
-      'icon': Icons.show_chart,
-      'nama': 'Laporan\nKeuangan',
-      'nextPage': LaporanKeuanganWarga()
-    }
-  ];
+  // final List<Map<String, dynamic>> _menuIconList = [
+  //   {
+  //     'icon': Icons.verified_user,
+  //     'nama': 'Tagihan\nKeamanan',
+  //     'nextPage': DetailTagihanWarga()
+  //   },
+  //   {
+  //     'icon': Icons.cleaning_services,
+  //     'nama': 'Tagihan\nKebersihan',
+  //     'nextPage': DetailTagihanWarga()
+  //   },
+  //   {
+  //     'icon': Icons.money,
+  //     'nama': 'Tagihan\nIuran',
+  //     'nextPage': DetailTagihanWarga()
+  //   },
+  //   {
+  //     'icon': Icons.show_chart,
+  //     'nama': 'Laporan\nKeuangan',
+  //     'nextPage': LaporanKeuanganWarga()
+  //   }
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -125,12 +125,12 @@ class HomePageWarga extends StatelessWidget {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _menuIcon(DetailTagihanWarga(), Icons.verified_user,
-                          'Tagihan\nKeamanan'),
-                      _menuIcon(DetailTagihanWarga(), Icons.cleaning_services,
-                          'Tagihan\nKebersihan'),
-                      _menuIcon(
-                          DetailTagihanWarga(), Icons.money, 'Tagihan\nIuran'),
+                      _menuIcon(DetailTagihanWarga(initialTabIndex: 0),
+                          Icons.verified_user, 'Tagihan\nKeamanan'),
+                      _menuIcon(DetailTagihanWarga(initialTabIndex: 1),
+                          Icons.cleaning_services, 'Tagihan\nKebersihan'),
+                      _menuIcon(DetailTagihanWarga(initialTabIndex: 2),
+                          Icons.money, 'Tagihan\nIuran'),
                       _menuIcon(LaporanKeuanganWarga(), Icons.show_chart,
                           'Laporan\nKeuangan')
                     ]),
