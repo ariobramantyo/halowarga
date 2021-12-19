@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/obscure.dart';
+import 'package:halowarga/views/pengurus/navbar_pengurus.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
@@ -15,11 +16,15 @@ class SignUpPage extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final _obscureController = Get.find<ObscureController>();
 
+  final _roleItems = ['Warga', 'Pengurus'];
+
+  String _selectedRole = '';
+
   Widget _formField(TextEditingController controller, String hint, bool obscure,
       {Widget? suffix}) {
     return Container(
       height: 56,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      // padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         controller: controller,
         textAlignVertical: TextAlignVertical.center,
@@ -50,7 +55,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         children: [
           Container(
             width: 67,
@@ -98,24 +103,54 @@ class SignUpPage extends StatelessWidget {
                                 ),
                         ),
                       )),
+                  Container(
+                    height: 56,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    margin: EdgeInsets.only(top: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColor.placeholder,
+                    ),
+                    child: DropdownButtonFormField(
+                      isExpanded: true,
+                      decoration: InputDecoration(border: InputBorder.none),
+                      dropdownColor: AppColor.white,
+                      style: TextStyle(
+                          color: AppColor.secondaryText, fontSize: 13),
+                      hint: Text(
+                        'PIlih Status Anda',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      items: _roleItems.map<DropdownMenuItem<String>>((value) {
+                        return DropdownMenuItem(
+                            child: Text(value), value: value);
+                      }).toList(),
+                      onChanged: (value) => _selectedRole = value.toString(),
+                      onSaved: (value) => _selectedRole = value.toString(),
+                      validator: (value) {
+                        if (value == null) {
+                          return "Role boleh kosong";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
                 ],
               )),
           SizedBox(height: 40),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                'Daftar',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
-              ),
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(353, 56),
-                primary: AppColor.mainColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                elevation: 0,
-              ),
+          ElevatedButton(
+            onPressed: () => Get.to(() => NavBarPengurus()),
+            child: Text(
+              'Daftar',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+            ),
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(353, 56),
+              primary: AppColor.mainColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              elevation: 0,
             ),
           ),
           SizedBox(height: 25),

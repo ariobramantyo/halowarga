@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/views/widget/card_person.dart';
 
-class WargaPage extends StatelessWidget {
-  WargaPage({Key? key}) : super(key: key);
+class WargaPagePengurus extends StatelessWidget {
+  WargaPagePengurus({Key? key}) : super(key: key);
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -21,7 +21,7 @@ class WargaPage extends StatelessWidget {
               padding: EdgeInsets.all(20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,12 +39,19 @@ class WargaPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  Text(
-                    '44 Warga',
-                    style: TextStyle(
-                        color: AppColor.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppColor.white),
+                      child: Icon(
+                        Icons.person_add,
+                        color: AppColor.mainColor,
+                      ),
+                    ),
                   )
                 ],
               ),

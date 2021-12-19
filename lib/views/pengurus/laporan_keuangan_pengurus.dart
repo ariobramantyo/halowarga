@@ -3,8 +3,34 @@ import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/views/widget/card_income.dart';
 
-class LaporanKeuanganWarga extends StatelessWidget {
-  LaporanKeuanganWarga({Key? key}) : super(key: key);
+class LaporanKeunganPengurus extends StatelessWidget {
+  LaporanKeunganPengurus({Key? key}) : super(key: key);
+
+  Widget _button(String title, IconData icon, Color color) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: Row(
+        children: [
+          Container(
+            height: 24,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+            child: Icon(icon),
+          ),
+          SizedBox(width: 10),
+          Text(
+            title,
+            style: TextStyle(fontSize: 11, color: AppColor.black),
+          )
+        ],
+      ),
+      style: ElevatedButton.styleFrom(
+        fixedSize: Size(150, 56),
+        primary: AppColor.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 0,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +81,18 @@ class LaporanKeuanganWarga extends StatelessWidget {
               ),
             ),
             Container(
-              height: 250,
+              height: 200,
               width: 250,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _button('Tambah Uang', Icons.add, AppColor.mainColor),
+                  _button('Kurangi Uang', Icons.remove, AppColor.red)
+                ],
+              ),
             ),
             Expanded(
                 child: Container(
