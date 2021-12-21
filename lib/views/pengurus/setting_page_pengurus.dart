@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/controller/user_controller.dart';
+import 'package:halowarga/services/auth_service.dart';
 
 class SettingPagePengurus extends StatelessWidget {
-  const SettingPagePengurus({Key? key}) : super(key: key);
+  SettingPagePengurus({Key? key}) : super(key: key);
+
+  final _userController = Get.find<UserController>();
+
+  void _logout() {
+    AuthService.signOut();
+    _userController.statusSignUp.value = '';
+    _userController.roleSignUp.value = '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +60,12 @@ class SettingPagePengurus extends StatelessWidget {
               Expanded(
                   child: Container(
                 color: AppColor.white,
+                child: Center(
+                  child: IconButton(
+                    onPressed: _logout,
+                    icon: Icon(Icons.logout),
+                  ),
+                ),
               ))
             ],
           ),

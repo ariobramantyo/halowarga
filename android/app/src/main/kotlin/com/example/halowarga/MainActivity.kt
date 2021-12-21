@@ -1,4 +1,4 @@
-package com.example.halowarga
+package com.bukancompany.halowarga
 
 import io.flutter.embedding.android.FlutterActivity
 

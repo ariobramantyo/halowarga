@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/views/warga/detail_tagihan_warga.dart';
 import 'package:halowarga/views/warga/halo_lapor_warga.dart';
 import 'package:halowarga/views/warga/laporan_keuangan_warga.dart';
@@ -10,10 +11,13 @@ import 'package:halowarga/views/widget/card_pengumuman.dart';
 class HomePageWarga extends StatelessWidget {
   HomePageWarga({Key? key}) : super(key: key);
 
+  final _userController = Get.find<UserController>();
+
   Widget _menuIcon(Widget nextPage, IconData icon, String title) {
     return GestureDetector(
       onTap: () {
         Get.to(() => nextPage);
+        print(_userController.loggedUser.value.name);
       },
       child: Container(
         width: 80,
@@ -47,29 +51,6 @@ class HomePageWarga extends StatelessWidget {
     );
   }
 
-  // final List<Map<String, dynamic>> _menuIconList = [
-  //   {
-  //     'icon': Icons.verified_user,
-  //     'nama': 'Tagihan\nKeamanan',
-  //     'nextPage': DetailTagihanWarga()
-  //   },
-  //   {
-  //     'icon': Icons.cleaning_services,
-  //     'nama': 'Tagihan\nKebersihan',
-  //     'nextPage': DetailTagihanWarga()
-  //   },
-  //   {
-  //     'icon': Icons.money,
-  //     'nama': 'Tagihan\nIuran',
-  //     'nextPage': DetailTagihanWarga()
-  //   },
-  //   {
-  //     'icon': Icons.show_chart,
-  //     'nama': 'Laporan\nKeuangan',
-  //     'nextPage': LaporanKeuanganWarga()
-  //   }
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +69,7 @@ class HomePageWarga extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Carlos",
+                          _userController.loggedUser.value.name!,
                           style: TextStyle(
                               color: AppColor.white,
                               fontSize: 24,

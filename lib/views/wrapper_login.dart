@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:get/get.dart';
-import 'package:halowarga/controller/obscure.dart';
 import 'package:halowarga/views/login_page.dart';
 import 'package:halowarga/views/signup_page.dart';
 
 class WrapperLogin extends StatelessWidget {
   WrapperLogin({Key? key}) : super(key: key);
-
-  final obscureController = Get.put(ObscureController());
 
   @override
   Widget build(BuildContext context) {

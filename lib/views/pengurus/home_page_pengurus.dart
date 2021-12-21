@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/views/pengurus/detail_tagihan_pengurus.dart';
 import 'package:halowarga/views/pengurus/laporan_keuangan_pengurus.dart';
 import 'package:halowarga/views/widget/card_pengumuman.dart';
@@ -8,10 +9,13 @@ import 'package:halowarga/views/widget/card_pengumuman.dart';
 class HomePagePengurus extends StatelessWidget {
   HomePagePengurus({Key? key}) : super(key: key);
 
+  final _userController = Get.find<UserController>();
+
   Widget _menuIcon(Widget nextPage, IconData icon, String title) {
     return GestureDetector(
       onTap: () {
         Get.to(() => nextPage);
+        print(_userController.loggedUser.value.name);
       },
       child: Container(
         width: 80,
@@ -60,14 +64,14 @@ class HomePagePengurus extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Carlos",
-                        style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: 24,
-                            height: 1,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      Obx(() => Text(
+                            _userController.loggedUser.value.name!,
+                            style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: 24,
+                                height: 1,
+                                fontWeight: FontWeight.w600),
+                          )),
                       Text(
                         "Rp.23.000.000",
                         style: TextStyle(

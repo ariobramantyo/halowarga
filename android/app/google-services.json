@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "110765069204",
+    "project_id": "halowarga-ae453",
+    "storage_bucket": "halowarga-ae453.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110765069204:android:2867085b4d8bbfbfe33581",
+        "android_client_info": {
+          "package_name": "com.bukancompany.halowarga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110765069204-oiko56s3viisk944o9f1gslpq1gafep9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNLc7QPWK86F8PnnYLtZiBctJklQqfrNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110765069204-oiko56s3viisk944o9f1gslpq1gafep9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

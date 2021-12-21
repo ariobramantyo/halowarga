@@ -31,6 +31,11 @@ dependencies:
   get: ^4.5.1
   flutter_svg: ^0.22.0
   intl: ^0.17.0
+  crypto: ^3.0.1
+  firebase_auth: ^3.3.4
+  firebase_core: ^1.4.0
+  cloud_firestore: ^2.4.0
+  flutter_easyloading: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,19 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
-import 'package:halowarga/controller/obscure.dart';
+import 'package:halowarga/controller/login_controller.dart';
+import 'package:halowarga/services/auth_service.dart';
+import 'package:halowarga/services/firestore_service.dart';
 import 'package:halowarga/views/signup_page.dart';
-import 'package:halowarga/views/warga/nav_bar_warga.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
   final _key = GlobalKey<FormState>();
-  final _obscureController = Get.find<ObscureController>();
+  final _loginController = Get.put(LoginController());
+
+  void _errorDialog(String title, String message) => Get.defaultDialog(
+        title: title,
+        middleText: message,
+        barrierDismissible: false,
+        onConfirm: () async {
+          Get.back();
+        },
+      );
+
+  void _login() async {
+    if (_key.currentState!.validate()) {
+      EasyLoading.show(status: 'loading...');
+      try {
+        await AuthService.signIn(_loginController.emailController.text,
+                _loginController.passwordController.text)
+            .then((value) => FirestoreService.getUserDataFromFirebase(value));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'wrong-password') {
+          _errorDialog('Invalid Password', 'Wrong password or email');
+        } else if (e.code == 'invalid-email') {
+          _errorDialog(
+              'Invalid Email', 'Please try again with the correct email!');
+        } else if (e.code == 'user-not-found') {
+          _errorDialog('User Not found',
+              'Email that you use not registered yet. Try to sign up first');
+        }
+        EasyLoading.dismiss();
+      } catch (e) {
+        print(e.toString());
+        EasyLoading.dismiss();
+      }
+      EasyLoading.dismiss();
+      print('sukses login');
+    }
+  }
 
   Widget _formField(TextEditingController controller, String hint, bool obscure,
       {Widget? suffix}) {
@@ -69,16 +105,16 @@ class LoginPage extends StatelessWidget {
                 key: _key,
                 child: Column(
                   children: [
-                    _formField(_emailController, 'Email', false),
+                    _formField(
+                        _loginController.emailController, 'Email', false),
                     SizedBox(height: 10),
                     Obx(() => _formField(
-                          _passwordController,
+                          _loginController.passwordController,
                           'Password',
-                          _obscureController.obscureLogin.value,
+                          _loginController.obscureLogin.value,
                           suffix: GestureDetector(
-                            onTap: () =>
-                                _obscureController.toggleObscureLogin(),
-                            child: _obscureController.obscureLogin.value
+                            onTap: () => _loginController.toggleObscureLogin(),
+                            child: _loginController.obscureLogin.value
                                 ? Icon(
                                     Icons.visibility_off_outlined,
                                     color: AppColor.mainColor,
@@ -97,7 +133,7 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: ElevatedButton(
-                onPressed: () => Get.to(() => NavBarWarga()),
+                onPressed: _login,
                 child: Text(
                   'Login',
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
