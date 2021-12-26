@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserData {
   String? uid;
@@ -52,4 +54,19 @@ class UserData {
         no: map['no'],
         imageUrl: map['imageUrl'],
       );
+
+  factory UserData.fromSnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>>? map) {
+    return UserData(
+      uid: map!['uid'],
+      name: map['name'],
+      email: map['email'],
+      password: map['password'],
+      address: map['address'],
+      status: map['status'],
+      role: map['role'],
+      no: map['no'],
+      imageUrl: map['imageUrl'],
+    );
+  }
 }

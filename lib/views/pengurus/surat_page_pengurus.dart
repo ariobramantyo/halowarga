@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/model/document.dart';
 import 'package:halowarga/views/widget/list_surat.dart';
 
 class SuratPagePengurus extends StatefulWidget {
@@ -97,9 +100,41 @@ class _SuratPagePengurusState extends State<SuratPagePengurus>
                 controller: _tabController,
                 children: [
                   // tab surat diminta
-                  ListSurat(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('document')
+                        .where('status', isEqualTo: 'Diproses')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var documents = snapshot.data!.docs
+                            .map((value) => Document.fromSnapshot(value
+                                as QueryDocumentSnapshot<Map<String, dynamic>>))
+                            .toList();
+
+                        return ListSurat(documents: documents);
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ),
                   // tab surat diserahkan
-                  ListSurat(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('document')
+                        .where('status', isNotEqualTo: 'Diproses')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var documents = snapshot.data!.docs
+                            .map((value) => Document.fromSnapshot(value
+                                as QueryDocumentSnapshot<Map<String, dynamic>>))
+                            .toList();
+
+                        return ListSurat(documents: documents);
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  )
                 ],
               ),
             ))

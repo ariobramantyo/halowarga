@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/surat_warga.dart';
+import 'package:halowarga/model/document.dart';
+import 'package:halowarga/services/firestore_service.dart';
+import 'package:intl/intl.dart';
 
 class SuratPageWarga extends StatelessWidget {
   SuratPageWarga({Key? key}) : super(key: key);
@@ -46,6 +49,27 @@ class SuratPageWarga extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _submit() {
+    if (_selectedJenisSurat != '' &&
+        _controller.namaController.text != '' &&
+        _controller.tanggalController.text != '' &&
+        _controller.ketController.text != '') {
+      FirestoreService.sendReport(
+        Document(
+            type: _selectedJenisSurat,
+            name: _controller.namaController.text,
+            date: _controller.tanggalController.text,
+            desc: _controller.ketController.text,
+            timeSubmit: DateFormat('kk:mm:ss').format(DateTime.now())),
+      );
+
+      _selectedJenisSurat = '';
+      _controller.namaController.text = '';
+      _controller.tanggalController.text = '';
+      _controller.ketController.text = '';
+    }
   }
 
   @override
@@ -147,7 +171,7 @@ class SuratPageWarga extends StatelessWidget {
                           height: 100, maxLines: 3),
                       SizedBox(height: 40),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _submit,
                         child: Text('Kirim',
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.w700)),

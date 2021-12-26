@@ -2,7 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:halowarga/const/colors.dart';
 
 class CardPengumuman extends StatelessWidget {
-  const CardPengumuman({Key? key}) : super(key: key);
+  CardPengumuman(
+      {Key? key,
+      required this.title,
+      required this.desc,
+      required this.date,
+      required this.time})
+      : super(key: key);
+
+  final String title;
+  final String desc;
+  final String date;
+  final String time;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +37,12 @@ class CardPengumuman extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '20',
+                      date.substring(0, 2),
                       style: TextStyle(
                           color: AppColor.secondaryText, fontSize: 24),
                     ),
                     Text(
-                      'Apr',
+                      date.substring(3, 6),
                       style: TextStyle(
                           color: AppColor.secondaryText, fontSize: 11),
                     )
@@ -45,13 +56,13 @@ class CardPengumuman extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Lorem Ipsum',
+                      title,
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo',
+                      desc,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
@@ -63,7 +74,7 @@ class CardPengumuman extends StatelessWidget {
             ],
           ),
           Text(
-            '15.00',
+            time.substring(0, 5),
             style: TextStyle(color: AppColor.secondaryText, fontSize: 11),
           )
         ],

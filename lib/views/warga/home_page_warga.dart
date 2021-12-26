@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/user_controller.dart';
+import 'package:halowarga/model/announce.dart';
+import 'package:halowarga/services/firestore_service.dart';
 import 'package:halowarga/views/warga/detail_tagihan_warga.dart';
 import 'package:halowarga/views/warga/halo_lapor_warga.dart';
 import 'package:halowarga/views/warga/laporan_keuangan_warga.dart';
@@ -76,13 +79,27 @@ class HomePageWarga extends StatelessWidget {
                               height: 1,
                               fontWeight: FontWeight.w600),
                         ),
-                        Text(
-                          "Rp.23.000.000",
-                          style: TextStyle(
-                              color: AppColor.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600),
-                        ),
+                        FutureBuilder<int>(
+                          future: FirestoreService.getTotalBalance(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                'Rp.${snapshot.data}',
+                                style: TextStyle(
+                                    color: AppColor.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600),
+                              );
+                            }
+                            return Text(
+                              'loading...',
+                              style: TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600),
+                            );
+                          },
+                        )
                       ],
                     ),
                     Row(
@@ -151,15 +168,34 @@ class HomePageWarga extends StatelessWidget {
                       ),
                       Expanded(
                           child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: 10,
-                          itemBuilder: (context, index) {
-                            return CardPengumuman();
-                          },
-                        ),
-                      )),
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('announcement')
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return ListView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        var annnouce =
+                                            Announcement.fromSnapshot(
+                                                snapshot.data!.docs[index]
+                                                    as QueryDocumentSnapshot<
+                                                        Map<String, dynamic>>);
+                                        return CardPengumuman(
+                                            title: annnouce.title,
+                                            desc: annnouce.desc,
+                                            date: annnouce.date,
+                                            time: annnouce.time);
+                                      },
+                                    );
+                                  }
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              ))),
                       Container(
                         height: 70,
                         width: double.infinity,

@@ -1,9 +1,21 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 
 class CardPerson extends StatelessWidget {
-  const CardPerson({Key? key}) : super(key: key);
+  CardPerson(
+      {Key? key,
+      required this.name,
+      required this.address,
+      required this.imageUrl,
+      required this.role})
+      : super(key: key);
+
+  final String name;
+  final String address;
+  final String? imageUrl;
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +30,28 @@ class CardPerson extends StatelessWidget {
           Row(
             children: [
               Container(
-                height: 45,
-                width: 45,
+                height: 47,
+                width: 47,
                 decoration: BoxDecoration(
-                    color: AppColor.placeholder, shape: BoxShape.circle),
+                  shape: BoxShape.circle,
+                  color: AppColor.placeholder,
+                ),
+                child: imageUrl == ''
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.person,
+                          size: 30,
+                          color: AppColor.secondaryText,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: Image.network(
+                            imageUrl ??
+                                'https://ppa-feui.com/wp-content/uploads/2013/01/nopict-300x300.png',
+                            fit: BoxFit.fill),
+                      ),
               ),
               SizedBox(width: 10),
               Container(
@@ -31,13 +61,13 @@ class CardPerson extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Lorem Ipsum',
+                      name,
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 2),
                     Text(
-                      'Lorem ipsum dolor sit amet',
+                      address,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
@@ -51,7 +81,7 @@ class CardPerson extends StatelessWidget {
             ],
           ),
           Text(
-            'warga',
+            role,
             style: TextStyle(color: AppColor.secondaryText, fontSize: 13),
           )
         ],

@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/services/firestore_service.dart';
+import 'package:halowarga/views/pengurus/add_income_page..dart';
 import 'package:halowarga/views/widget/card_income.dart';
 
 class LaporanKeunganPengurus extends StatelessWidget {
@@ -8,7 +11,8 @@ class LaporanKeunganPengurus extends StatelessWidget {
 
   Widget _button(String title, IconData icon, Color color) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () => Get.to(() =>
+          AddIncomePage(type: title == 'Tambah Uang' ? 'income' : 'outcome')),
       child: Row(
         children: [
           Container(
@@ -68,12 +72,26 @@ class LaporanKeunganPengurus extends StatelessWidget {
                         'Laporan Keuangan',
                         style: TextStyle(color: AppColor.white, fontSize: 17),
                       ),
-                      Text(
-                        'Rp.25.000.000',
-                        style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600),
+                      FutureBuilder<int>(
+                        future: FirestoreService.getTotalBalance(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              'Rp.${snapshot.data}',
+                              style: TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600),
+                            );
+                          }
+                          return Text(
+                            'loading...',
+                            style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -127,27 +145,37 @@ class LaporanKeunganPengurus extends StatelessWidget {
                   ),
                   Expanded(
                       child: Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return index % 2 == 0
-                            ? CardIncome(
-                                isIncome: true,
-                                title: 'Penerimaan uang Penerimaan',
-                                date: '29 Apr 2021',
-                                total: 'RP.23.450.000',
-                                income: '10.500.000')
-                            : CardIncome(
-                                isIncome: false,
-                                title: 'Penerimaan uang Penerimaan',
-                                date: '29 Apr 2021',
-                                total: 'RP.23.450.000',
-                                income: '10.500.000');
-                      },
-                    ),
-                  )),
+                          margin: EdgeInsets.only(top: 10),
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('financeReport')
+                                .orderBy('timeSubmit', descending: true)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    var income = snapshot.data!.docs[index];
+                                    return snapshot.data!.docs[index].id !=
+                                            'totalBalance'
+                                        ? CardIncome(
+                                            isIncome:
+                                                income['type'] == 'income',
+                                            title: income['title'],
+                                            date:
+                                                '${income['day']} ${income['month']} ${income['year']}',
+                                            total:
+                                                '${income['currentTotalBalance']}',
+                                            income: '${income['income']}')
+                                        : Container();
+                                  },
+                                );
+                              }
+                              return Center(child: CircularProgressIndicator());
+                            },
+                          ))),
                 ],
               ),
             ))

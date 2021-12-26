@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/halolapor_warga_controller.dart';
+import 'package:halowarga/model/report.dart';
+import 'package:halowarga/services/firestore_service.dart';
+import 'package:intl/intl.dart';
 
 class HaloLaporWarga extends StatelessWidget {
   HaloLaporWarga({Key? key}) : super(key: key);
@@ -135,7 +138,24 @@ class HaloLaporWarga extends StatelessWidget {
                       height: 100, maxLines: 3),
                   SizedBox(height: 40),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_controller.subjekController.text != '' &&
+                          _controller.ketController.text != '' &&
+                          _selectedKategoriLaporan != '') {
+                        FirestoreService.addReport(
+                          Report(
+                            category: _selectedKategoriLaporan,
+                            title: _controller.subjekController.text,
+                            desc: _controller.ketController.text,
+                            sender: userController.loggedUser.value.name!,
+                            date:
+                                DateFormat('d MMM yyyy').format(DateTime.now()),
+                            time: DateFormat('kk:mm:ss').format(DateTime.now()),
+                          ),
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
                     child: Text('Kirim',
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.w700)),

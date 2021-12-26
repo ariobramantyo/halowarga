@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/user_controller.dart';
+import 'package:halowarga/model/announce.dart';
+import 'package:halowarga/services/firestore_service.dart';
+import 'package:halowarga/views/pengurus/add_announce_page.dart';
 import 'package:halowarga/views/pengurus/detail_tagihan_pengurus.dart';
 import 'package:halowarga/views/pengurus/laporan_keuangan_pengurus.dart';
+import 'package:halowarga/views/pengurus/report_page.dart';
 import 'package:halowarga/views/widget/card_pengumuman.dart';
 
 class HomePagePengurus extends StatelessWidget {
@@ -72,13 +78,27 @@ class HomePagePengurus extends StatelessWidget {
                                 height: 1,
                                 fontWeight: FontWeight.w600),
                           )),
-                      Text(
-                        "Rp.23.000.000",
-                        style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
-                      ),
+                      FutureBuilder<int>(
+                        future: FirestoreService.getTotalBalance(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              'Rp.${snapshot.data}',
+                              style: TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600),
+                            );
+                          }
+                          return Text(
+                            'loading...',
+                            style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          );
+                        },
+                      )
                     ],
                   ),
                   Row(
@@ -115,7 +135,7 @@ class HomePagePengurus extends StatelessWidget {
             ),
             Expanded(
                 child: Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: AppColor.white,
                 borderRadius: BorderRadius.only(
@@ -147,62 +167,65 @@ class HomePagePengurus extends StatelessWidget {
                   ),
                   Expanded(
                       child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return CardPengumuman();
-                      },
-                    ),
-                  )),
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('announcement')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    var annnouce = Announcement.fromSnapshot(
+                                        snapshot.data!.docs[index]
+                                            as QueryDocumentSnapshot<
+                                                Map<String, dynamic>>);
+                                    return CardPengumuman(
+                                        title: annnouce.title,
+                                        desc: annnouce.desc,
+                                        date: annnouce.date,
+                                        time: annnouce.time);
+                                  },
+                                );
+                              }
+                              return Center(child: CircularProgressIndicator());
+                            },
+                          ))),
                   Container(
-                    height: 70,
-                    width: double.infinity,
-                    child: Center(
+                      height: 35,
+                      width: double.infinity,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: Get.mediaQuery.size.width * 2 / 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Halolapor',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Jika terdapat masalah silahkan lapor, kami akan membantu sepenuh hati.',
-                                  style: TextStyle(fontSize: 11),
-                                )
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                  color: AppColor.mainColor,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                          Text('Buat Pengumuman',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w500)),
+                          IconButton(
+                              onPressed: () => Get.to(() => AddAnnouncePage()),
+                              padding: EdgeInsets.zero,
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  size: 20, color: AppColor.mainColor))
                         ],
-                      ),
-                    ),
-                  )
+                      )),
+                  Divider(),
+                  Container(
+                      height: 35,
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Lihat Laporan Warga',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w500)),
+                          IconButton(
+                              onPressed: () => Get.to(() => ReportPage()),
+                              padding: EdgeInsets.zero,
+                              icon: Icon(Icons.arrow_forward_ios,
+                                  size: 20, color: AppColor.mainColor))
+                        ],
+                      ))
                 ],
               ),
             )),

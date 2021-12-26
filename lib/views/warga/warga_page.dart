@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/model/user.dart';
 import 'package:halowarga/views/widget/card_person.dart';
 
 class WargaPage extends StatelessWidget {
@@ -81,13 +83,32 @@ class WargaPage extends StatelessWidget {
                 child: Container(
               padding: EdgeInsets.all(20),
               color: AppColor.white,
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: 15,
-                itemBuilder: (context, index) {
-                  return CardPerson();
-                },
-              ),
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('user')
+                      .where('status', isEqualTo: 'accepted')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          var _warga = UserData.fromSnapshot(snapshot
+                                  .data!.docs[index]
+                              as QueryDocumentSnapshot<Map<String, dynamic>>);
+
+                          return CardPerson(
+                            name: _warga.name!,
+                            address: _warga.address!,
+                            imageUrl: _warga.imageUrl,
+                            role: _warga.role!,
+                          );
+                        },
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }),
             ))
           ],
         )));

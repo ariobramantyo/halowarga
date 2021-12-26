@@ -72,7 +72,7 @@ class CardIncome extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      isIncome ? '+$income' : '-$income',
+                      isIncome ? '+$income' : '$income',
                       style: TextStyle(
                           height: 1.1,
                           color: isIncome ? AppColor.mainColor : AppColor.red,
@@ -86,7 +86,7 @@ class CardIncome extends StatelessWidget {
                   style: TextStyle(color: AppColor.secondaryText, fontSize: 11),
                 ),
                 Text(
-                  total,
+                  'Rp.$total',
                   style: TextStyle(
                       color: isIncome ? AppColor.mainColor : AppColor.red,
                       fontSize: 17,
