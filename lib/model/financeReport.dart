@@ -9,6 +9,8 @@ class FinanceReport {
   String year;
   String type;
   String timeSubmit;
+  String payerName;
+  String typeIncome;
 
   FinanceReport({
     required this.title,
@@ -19,6 +21,8 @@ class FinanceReport {
     required this.year,
     required this.type,
     required this.timeSubmit,
+    this.payerName = '',
+    this.typeIncome = '',
   });
 
   Map<String, dynamic> toMap() => {
@@ -30,6 +34,8 @@ class FinanceReport {
         'year': this.year,
         'type': this.type,
         'timeSubmit': this.timeSubmit,
+        'payerName': this.payerName,
+        'typeIncome': this.typeIncome,
       };
 
   factory FinanceReport.fromSnapshot(
@@ -43,6 +49,8 @@ class FinanceReport {
       year: map['year'],
       type: map['type'],
       timeSubmit: map['timeSubmit'],
+      payerName: map['payerName'],
+      typeIncome: map['typeIncome'],
     );
   }
 }

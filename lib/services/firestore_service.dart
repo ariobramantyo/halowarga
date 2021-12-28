@@ -159,12 +159,14 @@ class FirestoreService {
   }
 
   static Future updateTotalBalance(int value) async {
+    print('ambil total balance function');
     final totalBalance = await FirebaseFirestore.instance
         .collection('financeReport')
         .doc('totalBalance')
         .get();
-
+    print('selesai ambil total balance');
     if (totalBalance.exists) {
+      print('exist');
       await FirebaseFirestore.instance
           .collection('financeReport')
           .doc('totalBalance')
@@ -175,6 +177,7 @@ class FirestoreService {
       print((totalBalance['totalBalance'] as int) + value);
       print(value);
     } else {
+      print('doesnt exist');
       await FirebaseFirestore.instance
           .collection('financeReport')
           .doc('totalBalance')
@@ -183,4 +186,55 @@ class FirestoreService {
       print('set total balance');
     }
   }
+
+  static Future<List<UserData>> getListWarga() async {
+    var listWargaSnapshot = await FirebaseFirestore.instance
+        .collection('user')
+        .where('status', isEqualTo: 'accepted')
+        .where('role', isEqualTo: 'Warga')
+        .get();
+
+    var listWarga = listWargaSnapshot.docs
+        .map((value) => UserData.fromSnapshot(value))
+        .toList();
+
+    // print(listWarga.length);
+
+    // List<String> listNamaWarga = [];
+
+    // listWarga.forEach((element) {
+    //   listNamaWarga.add(element.name!);
+    // });
+
+    return listWarga;
+  }
+
+  static void addUserMonthlyPayment(FinanceReport financeReport, String uid) {
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .collection('monthlyPayment')
+        .add(financeReport.toMap());
+  }
+
+  // static Future<List<String>> getListNamaWarga() async {
+  //   var listWargaSnapshot = await FirebaseFirestore.instance
+  //       .collection('user')
+  //       .where('status', isEqualTo: 'accepted')
+  //       .where('role', isEqualTo: 'warga')
+  //       .get();
+
+  //   var listWarga = listWargaSnapshot
+  //       .map((value) => UserData.fromSnapshot(
+  //           value as QueryDocumentSnapshot<Map<String, dynamic>>))
+  //       .toList();
+
+  //   List<String> listNamaWarga = [];
+
+  //   listWarga.forEach((element) {
+  //     listNamaWarga.add(element.name!);
+  //   });
+
+  //   return listNamaWarga;
+  // }
 }
