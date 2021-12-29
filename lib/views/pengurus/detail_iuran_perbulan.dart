@@ -75,6 +75,7 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.mainColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -82,37 +83,59 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
               height: 100,
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 20),
+              color: AppColor.mainColor,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
+                    onTap: () => Get.back(),
                     child: Container(
                       height: 45,
                       width: 45,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
-                          color: AppColor.mainColor,
+                          color: AppColor.white,
                           borderRadius: BorderRadius.circular(10)),
-                      child: Icon(Icons.arrow_back_ios, color: AppColor.white),
+                      child:
+                          Icon(Icons.arrow_back_ios, color: AppColor.mainColor),
                     ),
                   ),
+                  SizedBox(width: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.month,
                         style: TextStyle(
-                            color: AppColor.secondaryText, fontSize: 17),
+                            color: AppColor.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500),
                       ),
-                      Text(
-                        '+200.000',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w500),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('financeReport')
+                            .where('month',
+                                isEqualTo: widget.month.substring(0, 3))
+                            .where('year', isEqualTo: widget.year)
+                            .where('typeIncome', isEqualTo: widget.tabName)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              '+' +
+                                  (snapshot.data!.docs.length * 50000)
+                                      .toString(),
+                              style: TextStyle(
+                                  color: AppColor.white, fontSize: 13),
+                            );
+                          }
+                          return Text(
+                            'loading...',
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.w500),
+                          );
+                        },
                       )
                     ],
                   ),
@@ -156,6 +179,7 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
             ),
             Expanded(
                 child: Container(
+              color: AppColor.white,
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TabBarView(
                 controller: _tabController,

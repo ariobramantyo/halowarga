@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/controller/year_controller.dart';
 import 'package:halowarga/views/pengurus/detail_iuran_perbulan.dart';
 import 'package:intl/intl.dart';
 
@@ -33,6 +34,8 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
     'December'
   ];
 
+  final _yearController = Get.put(YearController());
+
   @override
   void initState() {
     super.initState();
@@ -52,11 +55,14 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
 
   Widget monthCard(String month, String tabName) {
     return GestureDetector(
-      onTap: () => Get.to(() => DetailIuranPerbulan(
-            tabName: tabName,
-            month: month,
-            year: '2021',
-          )),
+      onTap: () {
+        Get.to(() => DetailIuranPerbulan(
+              tabName: tabName,
+              month: month,
+              year: _yearController.year.toString(),
+            ));
+        print(_yearController.year);
+      },
       child: Container(
         height: 100,
         width: 80,
@@ -184,6 +190,41 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
                 ],
               ),
             ),
+            Container(
+              height: 60,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              color: AppColor.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => Text(
+                        'Tagihan ${_yearController.year.value}',
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w500),
+                      )),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () => _yearController.decreaseYear(),
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.chevron_left)),
+                      Obx(
+                        () => IconButton(
+                            onPressed: () => _yearController.increaseYear(),
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              Icons.chevron_right,
+                              color: _yearController.isMaxYear()
+                                  ? AppColor.secondaryText
+                                  : AppColor.black,
+                            )),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
             Expanded(
                 child: Container(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -203,6 +244,7 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
                               .map<Widget>(
                                   (month) => monthCard(month, 'Keamanan'))
                               .toList()),
+                      SizedBox(height: 20),
                     ],
                   ),
                   // tab kebersihan
@@ -218,6 +260,7 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
                               .map<Widget>(
                                   (month) => monthCard(month, 'Kebersihan'))
                               .toList()),
+                      SizedBox(height: 20),
                     ],
                   ),
                   // tab iuran bulanab
@@ -233,6 +276,7 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
                               .map<Widget>(
                                   (month) => monthCard(month, 'Iuran Bulanan'))
                               .toList()),
+                      SizedBox(height: 20),
                     ],
                   ),
                 ],
