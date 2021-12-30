@@ -217,24 +217,49 @@ class FirestoreService {
         .add(financeReport.toMap());
   }
 
-  // static Future<List<String>> getListNamaWarga() async {
-  //   var listWargaSnapshot = await FirebaseFirestore.instance
-  //       .collection('user')
-  //       .where('status', isEqualTo: 'accepted')
-  //       .where('role', isEqualTo: 'warga')
-  //       .get();
+  static void updateAddress(String newAddress, String uid) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'address': (newAddress)});
 
-  //   var listWarga = listWargaSnapshot
-  //       .map((value) => UserData.fromSnapshot(
-  //           value as QueryDocumentSnapshot<Map<String, dynamic>>))
-  //       .toList();
+    userController.loggedUser.update((user) {
+      user!.address = newAddress;
+    });
 
-  //   List<String> listNamaWarga = [];
+    userController.loggedUser.refresh();
+  }
 
-  //   listWarga.forEach((element) {
-  //     listNamaWarga.add(element.name!);
-  //   });
+  static void updateName(String newName, String uid) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'name': (newName)});
 
-  //   return listNamaWarga;
-  // }
+    userController.loggedUser.update((user) {
+      user!.name = newName;
+    });
+
+    userController.loggedUser.refresh();
+  }
+
+  static void updatePhoneNUmber(String newPhoneNumber, String uid) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'no': (newPhoneNumber)});
+
+    userController.loggedUser.update((user) {
+      user!.no = newPhoneNumber;
+    });
+
+    userController.loggedUser.refresh();
+  }
+
+  static Future<void> updateUserPhoto(String uid, String imageUrl) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'imageUrl': imageUrl});
+  }
 }
