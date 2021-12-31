@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/navbar_warga_controller.dart';
+import 'package:halowarga/views/setting_page.dart';
 import 'package:halowarga/views/warga/home_page_warga.dart';
-import 'package:halowarga/views/warga/setting_page_warga.dart';
 import 'package:halowarga/views/warga/surat_page_warga.dart';
 import 'package:halowarga/views/warga/warga_page.dart';
 
@@ -14,7 +14,7 @@ class NavBarWarga extends StatelessWidget {
     HomePageWarga(),
     SuratPageWarga(),
     WargaPage(),
-    SettingPageWarga()
+    SettingPage()
   ];
 
   final _navBarController = Get.put(NavBarWargaController());

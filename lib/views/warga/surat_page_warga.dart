@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/surat_warga.dart';
+import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/model/document.dart';
 import 'package:halowarga/services/firestore_service.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ class SuratPageWarga extends StatelessWidget {
   SuratPageWarga({Key? key}) : super(key: key);
 
   final _controller = Get.put(SuratWargaController());
+  final _userController = Get.find<UserController>();
 
   final _titleFormStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.w500);
 
@@ -56,14 +58,18 @@ class SuratPageWarga extends StatelessWidget {
         _controller.namaController.text != '' &&
         _controller.tanggalController.text != '' &&
         _controller.ketController.text != '') {
+      final String id = DateTime.now().toIso8601String();
       FirestoreService.sendReport(
-        Document(
-            type: _selectedJenisSurat,
-            name: _controller.namaController.text,
-            date: _controller.tanggalController.text,
-            desc: _controller.ketController.text,
-            timeSubmit: DateFormat('kk:mm:ss').format(DateTime.now())),
-      );
+          Document(
+              id: id,
+              type: _selectedJenisSurat,
+              name: _controller.namaController.text,
+              date: _controller.tanggalController.text,
+              desc: _controller.ketController.text,
+              sender: _userController.loggedUser.value.name!,
+              senderId: _userController.loggedUser.value.uid!,
+              timeSubmit: DateFormat('kk:mm:ss').format(DateTime.now())),
+          id);
 
       _selectedJenisSurat = '';
       _controller.namaController.text = '';

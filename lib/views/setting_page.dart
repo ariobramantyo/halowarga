@@ -6,9 +6,10 @@ import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/services/auth_service.dart';
 import 'package:halowarga/services/firestore_service.dart';
 import 'package:halowarga/views/edit_page.dart';
+import 'package:halowarga/views/warga/daftar_pengajuan_surat.dart';
 
-class SettingPagePengurus extends StatelessWidget {
-  SettingPagePengurus({Key? key}) : super(key: key);
+class SettingPage extends StatelessWidget {
+  SettingPage({Key? key}) : super(key: key);
 
   final _userController = Get.find<UserController>();
   final editDataController = Get.put(EditDataController());
@@ -220,6 +221,30 @@ class SettingPagePengurus extends StatelessWidget {
                             _userController.loggedUser.value.email ?? '',
                             false,
                           ),
+                          SizedBox(height: 20),
+                          if (userController.loggedUser.value.role == 'Warga')
+                            Container(
+                                height: 35,
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Daftar Pengajuan Surat',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500)),
+                                    IconButton(
+                                        onPressed: () => Get.to(() =>
+                                            DaftarPengajuanSuratPage(
+                                                uid: userController
+                                                    .loggedUser.value.uid!)),
+                                        padding: EdgeInsets.zero,
+                                        icon: Icon(Icons.arrow_forward_ios,
+                                            size: 20,
+                                            color: AppColor.mainColor))
+                                  ],
+                                )),
                           Align(
                             alignment: Alignment.centerRight,
                             child: GestureDetector(

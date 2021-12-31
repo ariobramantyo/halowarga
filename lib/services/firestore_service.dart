@@ -119,11 +119,21 @@ class FirestoreService {
         colorText: Colors.black);
   }
 
-  static void sendReport(Document document) {
-    FirebaseFirestore.instance.collection('document').add(document.toMap());
+  static void sendReport(Document document, String id) {
+    FirebaseFirestore.instance
+        .collection('document')
+        .doc(id)
+        .set(document.toMap());
+
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(userController.loggedUser.value.uid)
+        .collection('listDocuments')
+        .doc(id)
+        .set(document.toMap());
 
     Get.snackbar('Surat berhasil dikirim',
-        'Harap tunggu informasi selanjutnya dari pengurus RT',
+        'Cek status keselesaian surat anda pada halaman pengaturan',
         colorText: Colors.black);
   }
 
@@ -261,5 +271,22 @@ class FirestoreService {
         .collection('user')
         .doc(uid)
         .update({'imageUrl': imageUrl});
+  }
+
+  static void documentDone(String docId, String id) {
+    print(docId);
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(id)
+        .collection('listDocuments')
+        .doc(docId)
+        .update({'status': 'Selesai'});
+    print('berhasil update di document');
+
+    FirebaseFirestore.instance
+        .collection('document')
+        .doc(docId)
+        .update({'status': 'Selesai'});
+    print('berhasil update di user');
   }
 }

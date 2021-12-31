@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/navbar_pengurus_controller.dart';
 import 'package:halowarga/views/pengurus/home_page_pengurus.dart';
-import 'package:halowarga/views/pengurus/setting_page_pengurus.dart';
+import 'package:halowarga/views/setting_page.dart';
 import 'package:halowarga/views/pengurus/surat_page_pengurus.dart';
 import 'package:halowarga/views/pengurus/warga_page_pengurus.dart';
 
@@ -14,7 +14,7 @@ class NavBarPengurus extends StatelessWidget {
     HomePagePengurus(),
     SuratPagePengurus(),
     WargaPagePengurus(),
-    SettingPagePengurus()
+    SettingPage()
   ];
 
   final _navBarController = Get.put(NavBarPengurusController());
