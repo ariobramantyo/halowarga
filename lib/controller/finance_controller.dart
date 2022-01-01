@@ -25,6 +25,6 @@ class FinanceReportController extends GetxController {
   }
 
   void changeDate(DateTime date) {
-    dateSubmit.value = DateFormat('d MMM yyyy').format(date);
+    dateSubmit.value = DateFormat('dd MMM yyyy').format(date);
   }
 }

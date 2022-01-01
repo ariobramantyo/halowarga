@@ -103,7 +103,7 @@ class AddIncomePage extends StatelessWidget {
                       doneStyle: TextStyle(color: AppColor.mainColor)),
                   onConfirm: (date) {
                     _financeCont.changeDate(date);
-                    print('time $date');
+                    print('time ${_financeCont.dateSubmit}');
                   },
                 );
               },

@@ -4,14 +4,27 @@ import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/services/firestore_service.dart';
 import 'package:halowarga/views/widget/card_income.dart';
+import 'package:intl/intl.dart';
 
 class LaporanKeuanganWarga extends StatelessWidget {
   LaporanKeuanganWarga({Key? key}) : super(key: key);
 
+  final _year = DateFormat('yyyy').format(DateTime.now());
+  final _month = DateFormat('MMM').format(DateTime.now());
+
+  int _getTotalValue(List<dynamic> values) {
+    var total = 0;
+    values.forEach((element) {
+      total += element['income'] as int;
+    });
+
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.mainColor,
+      backgroundColor: AppColor.placeholder,
       body: SafeArea(
         child: Column(
           children: [
@@ -19,6 +32,7 @@ class LaporanKeuanganWarga extends StatelessWidget {
               height: 100,
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 20),
+              color: AppColor.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,10 +44,9 @@ class LaporanKeuanganWarga extends StatelessWidget {
                       width: 45,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
-                          color: AppColor.white,
+                          color: AppColor.mainColor,
                           borderRadius: BorderRadius.circular(10)),
-                      child:
-                          Icon(Icons.arrow_back_ios, color: AppColor.mainColor),
+                      child: Icon(Icons.arrow_back_ios, color: AppColor.white),
                     ),
                   ),
                   Column(
@@ -42,7 +55,7 @@ class LaporanKeuanganWarga extends StatelessWidget {
                     children: [
                       Text(
                         'Laporan Keuangan',
-                        style: TextStyle(color: AppColor.white, fontSize: 17),
+                        style: TextStyle(color: AppColor.black, fontSize: 17),
                       ),
                       FutureBuilder<int>(
                         future: FirestoreService.getTotalBalance(),
@@ -51,7 +64,7 @@ class LaporanKeuanganWarga extends StatelessWidget {
                             return Text(
                               'Rp.${snapshot.data}',
                               style: TextStyle(
-                                  color: AppColor.white,
+                                  color: AppColor.black,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600),
                             );
@@ -59,8 +72,8 @@ class LaporanKeuanganWarga extends StatelessWidget {
                           return Text(
                             'loading...',
                             style: TextStyle(
-                                color: AppColor.white,
-                                fontSize: 20,
+                                color: AppColor.black,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600),
                           );
                         },
@@ -70,10 +83,87 @@ class LaporanKeuanganWarga extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: 15),
             Container(
-              height: 250,
-              width: 250,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              decoration: BoxDecoration(color: AppColor.white),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('financeReport')
+                    .where('year', isEqualTo: _year)
+                    .where('month', isEqualTo: _month)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    print('banyaknya snapshot ${snapshot.data!.docs.length}');
+                    final income = snapshot.data!.docs
+                        .where((element) =>
+                            element.id != 'totalBalance' &&
+                            element['type'] == 'income')
+                        .toList();
+
+                    final outcome = snapshot.data!.docs
+                        .where((element) =>
+                            element.id != 'totalBalance' &&
+                            element['type'] == 'outcome')
+                        .toList();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Laporan Bulan $_month $_year',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Pemasukan', style: TextStyle(fontSize: 17)),
+                            Text(
+                              _getTotalValue(income).toString(),
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Pengeluaran', style: TextStyle(fontSize: 17)),
+                            Text(_getTotalValue(outcome).toString(),
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: AppColor.red,
+                                    fontWeight: FontWeight.w500))
+                          ],
+                        ),
+                        Divider(
+                          color: AppColor.secondaryText,
+                          thickness: 1,
+                          indent: Get.width / 2,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                              (_getTotalValue(outcome) + _getTotalValue(income))
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ],
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
+            SizedBox(height: 15),
             Expanded(
                 child: Container(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -83,27 +173,11 @@ class LaporanKeuanganWarga extends StatelessWidget {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12))),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Detail Keuangan',
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Text(
-                          'Lihat semua',
-                          style: TextStyle(
-                              color: AppColor.mainColor,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      )
-                    ],
+                  Text(
+                    'Detail Keuangan',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                   ),
                   Expanded(
                       child: Container(
