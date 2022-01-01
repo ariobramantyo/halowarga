@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
-import 'package:halowarga/model/document.dart';
 import 'package:halowarga/views/widget/list_surat.dart';
 
 class DaftarPengajuanSuratPage extends StatelessWidget {
@@ -27,10 +26,6 @@ class DaftarPengajuanSuratPage extends StatelessWidget {
             .get(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var documents = snapshot.data!.docs
-                .map((value) => Document.fromSnapshot(
-                    value as QueryDocumentSnapshot<Map<String, dynamic>>))
-                .toList();
             print(snapshot.data!.docs.first.id);
             return ListSurat(
               documents: snapshot.data!.docs,

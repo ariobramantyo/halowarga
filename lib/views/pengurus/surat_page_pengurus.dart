@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:halowarga/const/colors.dart';
-import 'package:halowarga/model/document.dart';
 import 'package:halowarga/views/widget/list_surat.dart';
 
 class SuratPagePengurus extends StatefulWidget {

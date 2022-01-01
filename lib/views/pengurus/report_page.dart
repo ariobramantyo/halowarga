@@ -22,11 +22,17 @@ class ReportPage extends StatelessWidget {
                 var report = Report.fromSnapshot(snapshot.data!.docs[index]
                     as QueryDocumentSnapshot<Map<String, dynamic>>);
                 return Container(
-                  height: 120,
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
-                      color: AppColor.mainColor.withOpacity(0.2),
+                      color: AppColor.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 5,
+                            spreadRadius: 1,
+                            offset: Offset(2, 2))
+                      ],
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,8 +72,6 @@ class ReportPage extends StatelessWidget {
                       ),
                       Text(
                         report.desc,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 13),
                       ),
                     ],

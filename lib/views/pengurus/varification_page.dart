@@ -9,7 +9,6 @@ import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/model/user.dart';
 import 'package:halowarga/services/auth_service.dart';
 import 'package:halowarga/services/firestore_service.dart';
-import 'package:halowarga/views/login_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationPage extends StatefulWidget {
