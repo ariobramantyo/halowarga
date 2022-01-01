@@ -136,7 +136,7 @@ class HomePageWarga extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                     color: AppColor.white,
                     borderRadius: BorderRadius.only(
@@ -144,27 +144,15 @@ class HomePageWarga extends StatelessWidget {
                         topRight: Radius.circular(12)),
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Pengumuman',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w500),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Text(
-                              'Lihat semua',
-                              style: TextStyle(
-                                  color: AppColor.mainColor,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )
-                        ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          'Pengumuman',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w500),
+                        ),
                       ),
                       Expanded(
                           child: Container(
@@ -172,6 +160,7 @@ class HomePageWarga extends StatelessWidget {
                               child: StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('announcement')
+                                    .orderBy('date')
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
@@ -185,10 +174,8 @@ class HomePageWarga extends StatelessWidget {
                                                     as QueryDocumentSnapshot<
                                                         Map<String, dynamic>>);
                                         return CardPengumuman(
-                                            title: annnouce.title,
-                                            desc: annnouce.desc,
-                                            date: annnouce.date,
-                                            time: annnouce.time);
+                                          announcement: annnouce,
+                                        );
                                       },
                                     );
                                   }
@@ -199,6 +186,7 @@ class HomePageWarga extends StatelessWidget {
                       Container(
                         height: 70,
                         width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

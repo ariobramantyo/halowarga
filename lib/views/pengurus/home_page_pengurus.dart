@@ -138,7 +138,7 @@ class HomePagePengurus extends StatelessWidget {
             ),
             Expanded(
                 child: Container(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: AppColor.white,
                 borderRadius: BorderRadius.only(
@@ -146,27 +146,15 @@ class HomePagePengurus extends StatelessWidget {
                     topRight: Radius.circular(12)),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Pengumuman',
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Text(
-                          'Lihat semua',
-                          style: TextStyle(
-                              color: AppColor.mainColor,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      )
-                    ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Pengumuman',
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                    ),
                   ),
                   Expanded(
                       child: Container(
@@ -174,6 +162,7 @@ class HomePagePengurus extends StatelessWidget {
                           child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('announcement')
+                                .orderBy('date')
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
@@ -186,10 +175,8 @@ class HomePagePengurus extends StatelessWidget {
                                             as QueryDocumentSnapshot<
                                                 Map<String, dynamic>>);
                                     return CardPengumuman(
-                                        title: annnouce.title,
-                                        desc: annnouce.desc,
-                                        date: annnouce.date,
-                                        time: annnouce.time);
+                                      announcement: annnouce,
+                                    );
                                   },
                                 );
                               }
@@ -199,6 +186,7 @@ class HomePagePengurus extends StatelessWidget {
                   Container(
                       height: 35,
                       width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -216,6 +204,7 @@ class HomePagePengurus extends StatelessWidget {
                   Container(
                       height: 35,
                       width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
