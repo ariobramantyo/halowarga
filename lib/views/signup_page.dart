@@ -9,6 +9,7 @@ import 'package:halowarga/controller/user_controller.dart';
 import 'package:halowarga/model/user.dart';
 import 'package:halowarga/services/auth_service.dart';
 import 'package:halowarga/services/firestore_service.dart';
+import 'package:halowarga/views/pengurus/varification_page.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({Key? key}) : super(key: key);
@@ -32,48 +33,58 @@ class SignUpPage extends StatelessWidget {
 
   void _signUp() async {
     if (_key.currentState!.validate()) {
-      EasyLoading.show(status: 'loading...');
-      try {
-        print('sign up');
-        _userController.roleSignUp.value = _selectedRole;
-        _userController.statusSignUp.value =
-            _selectedRole == 'Warga' ? 'waiting' : 'accepted';
+      if (_selectedRole == 'Pengurus') {
+        Get.to(() => VerificationPage(), arguments: {
+          'name': _signupController.nameController.text,
+          'email': _signupController.emailController.text,
+          'password': _signupController.passwordController.text,
+          'address': _signupController.addressController.text,
+          'role': _selectedRole,
+          'status': 'accepted',
+        });
+      } else {
+        EasyLoading.show(status: 'loading...');
+        try {
+          print('sign up');
+          _userController.roleSignUp.value = _selectedRole;
+          _userController.statusSignUp.value =
+              _selectedRole == 'Warga' ? 'waiting' : 'accepted';
 
-        await AuthService.signUp(_signupController.emailController.text,
-                _signupController.passwordController.text)
-            .then(
-          (value) => FirestoreService.addUserDataToFirestore(
-            value,
-            UserData(
-              uid: value!.uid,
-              name: _signupController.nameController.text,
-              email: _signupController.emailController.text,
-              password: _signupController.passwordController.text,
-              address: _signupController.addressController.text,
-              role: _selectedRole,
-              status: _selectedRole == 'Pengurus' ? 'accepted' : 'waiting',
-            ),
-          ),
-        );
-        Get.back();
-        print('sukses signup');
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          _errorDialog('Invalid Password',
-              'Password must contain atleast 6 character. Please try again with the correct password');
-        } else if (e.code == 'invalid-email') {
-          _errorDialog('Invalid Email',
-              'Please try again with the correct email! format');
-        } else if (e.code == 'email-already-in-use') {
-          _errorDialog('Email Alredy Exists',
-              'The email provided is already in use by an existing user. Please sign in with your registered email');
+          await AuthService.signUp(_signupController.emailController.text,
+                  _signupController.passwordController.text)
+              .then(
+            (value) => FirestoreService.addUserDataToFirestore(
+                value,
+                UserData(
+                  uid: value!.uid,
+                  name: _signupController.nameController.text,
+                  email: _signupController.emailController.text,
+                  password: _signupController.passwordController.text,
+                  address: _signupController.addressController.text,
+                  role: _selectedRole,
+                  status: _selectedRole == 'Pengurus' ? 'accepted' : 'waiting',
+                )),
+          );
+          Get.back();
+          print('sukses signup');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            _errorDialog('Invalid Password',
+                'Password must contain atleast 6 character. Please try again with the correct password');
+          } else if (e.code == 'invalid-email') {
+            _errorDialog('Invalid Email',
+                'Please try again with the correct email! format');
+          } else if (e.code == 'email-already-in-use') {
+            _errorDialog('Email Alredy Exists',
+                'The email provided is already in use by an existing user. Please sign in with your registered email');
+          }
+          EasyLoading.dismiss();
+        } catch (e) {
+          print(e.toString());
+          EasyLoading.dismiss();
         }
         EasyLoading.dismiss();
-      } catch (e) {
-        print(e.toString());
-        EasyLoading.dismiss();
       }
-      EasyLoading.dismiss();
     }
   }
 

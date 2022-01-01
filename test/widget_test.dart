@@ -8,7 +8,16 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
 
@@ -31,8 +40,8 @@ void main() {
   //   expect(find.text('0'), findsNothing);
   //   expect(find.text('1'), findsOneWidget);
   // });
-  var password = 'password123';
-  var bytes = utf8.encode(password);
-  var hash = md5.convert(bytes);
-  print(hash);
+  // var password = 'password123';
+  // var bytes = utf8.encode(password);
+  // var hash = md5.convert(bytes);
+  // print(hash);
 }

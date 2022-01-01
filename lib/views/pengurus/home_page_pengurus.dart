@@ -71,9 +71,11 @@ class HomePagePengurus extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Obx(() => Text(
-                            _userController.loggedUser.value.name!
-                                .split(' ')
-                                .first,
+                            _userController.loggedUser.value.name != null
+                                ? _userController.loggedUser.value.name!
+                                    .split(' ')
+                                    .first
+                                : '',
                             style: TextStyle(
                                 color: AppColor.white,
                                 fontSize: 24,
