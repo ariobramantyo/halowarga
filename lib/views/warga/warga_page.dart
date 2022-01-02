@@ -43,12 +43,28 @@ class WargaPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  Text(
-                    '44 Warga',
-                    style: TextStyle(
-                        color: AppColor.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('user')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          '${snapshot.data!.docs.length} Warga',
+                          style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                        );
+                      }
+                      return Text(
+                        '0 Warga',
+                        style: TextStyle(
+                            color: AppColor.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                      );
+                    },
                   )
                 ],
               ),

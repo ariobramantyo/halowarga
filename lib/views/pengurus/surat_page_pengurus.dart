@@ -42,7 +42,7 @@ class _SuratPagePengurusState extends State<SuratPagePengurus>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Warga',
+                    'Pengajuan Surat',
                     style: TextStyle(
                         color: AppColor.white,
                         fontSize: 24,

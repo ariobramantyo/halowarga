@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
 import 'package:halowarga/controller/search_warga_controller.dart';
 import 'package:halowarga/model/user.dart';
-import 'package:halowarga/services/firestore_service.dart';
 import 'package:halowarga/views/pengurus/confirm_warga_page.dart';
 import 'package:halowarga/views/widget/card_person.dart';
-import 'package:intl/date_symbols.dart';
 
 class WargaPagePengurus extends StatelessWidget {
   WargaPagePengurus({Key? key}) : super(key: key);
@@ -34,12 +31,37 @@ class WargaPagePengurus extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Warga',
-                        style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Warga',
+                            style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(width: 5),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('user')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  '(${snapshot.data!.docs.length})',
+                                  style: TextStyle(
+                                      color: AppColor.white, fontSize: 20),
+                                );
+                              }
+                              return Text(
+                                '0',
+                                style: TextStyle(
+                                    color: AppColor.white, fontSize: 20),
+                              );
+                            },
+                          )
+                        ],
                       ),
                       Text(
                         'RT 03 Kelurahan Pesalakan',
