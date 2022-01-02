@@ -63,7 +63,7 @@ class AddAnnouncePage extends StatelessWidget {
                   FirestoreService.addAnnounce(Announcement(
                     title: _announceCont.subject.text,
                     desc: _announceCont.desc.text,
-                    date: DateFormat('d MMM yyyy').format(DateTime.now()),
+                    date: DateFormat('dd MMM yyyy').format(DateTime.now()),
                     time: DateFormat('kk:mm:ss').format(DateTime.now()),
                   ));
                   print('selesai kirim');

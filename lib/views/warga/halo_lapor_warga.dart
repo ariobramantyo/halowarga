@@ -148,8 +148,8 @@ class HaloLaporWarga extends StatelessWidget {
                             title: _controller.subjekController.text,
                             desc: _controller.ketController.text,
                             sender: userController.loggedUser.value.name!,
-                            date:
-                                DateFormat('d MMM yyyy').format(DateTime.now()),
+                            date: DateFormat('dd MMM yyyy')
+                                .format(DateTime.now()),
                             time: DateFormat('kk:mm:ss').format(DateTime.now()),
                           ),
                         );
