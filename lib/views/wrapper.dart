@@ -19,28 +19,10 @@ class Wrapper extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: AuthService.firebaseUserStream,
       builder: (context, snapshot) {
-        print(
-            'stream builder======================================================================');
         return FutureBuilder<List<dynamic>?>(
           future: FirestoreService.isUserCitizen(snapshot.data),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(
-                  '${snapshot.data}================================================================');
-              // return userController.loggedUser.value.role ==
-              //         'Warga' // check if user is a citizen
-              //     ? userController.loggedUser.value.status ==
-              //             'accepted' // check if user is accepted
-              //         ? NavBarWarga()
-              //         : WaitingPageWarga()
-              //     : NavBarPengurus();
-              // return userController.roleSignUp.value ==
-              //         'Warga'  // check if user is a citizen
-              //     ? userController.statusSignUp.value ==
-              //             'accepted' // check if user is accepted
-              //         ? NavBarWarga()
-              //         : WaitingPageWarga()
-              //     : NavBarPengurus();
               if (snapshot.data![0] != null && snapshot.data![1] != null) {
                 return snapshot.data![0] // check if user is a citizen
                     ? snapshot.data![1] // check if user is accepted
@@ -60,16 +42,6 @@ class Wrapper extends StatelessWidget {
             return LoginPage();
           },
         );
-        // if (snapshot.hasData) {
-        //   return userController.roleSignUp.value ==
-        //           'Warga' // check if user is a citizen
-        //       ? userController.statusSignUp.value ==
-        //               'accepted' // check if user is accepted
-        //           ? NavBarWarga()
-        //           : WaitingPageWarga()
-        //       : NavBarPengurus();
-        // }
-        // return LoginPage();
       },
     );
   }

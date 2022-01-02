@@ -32,8 +32,6 @@ class EditDataController extends GetxController {
           await imagePicker.pickImage(source: ImageSource.gallery);
 
       if (checkImage != null) {
-        print(checkImage.name);
-        print(checkImage.path);
         pickedImage = checkImage;
       }
     } catch (e) {

@@ -32,7 +32,6 @@ class HomePageWarga extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(() => nextPage);
-        print(_userController.loggedUser.value.name);
       },
       child: Container(
         width: 80,

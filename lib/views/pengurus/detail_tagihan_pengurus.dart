@@ -61,7 +61,6 @@ class _DetailTagihanPengurusState extends State<DetailTagihanPengurus>
               month: month,
               year: _yearController.year.toString(),
             ));
-        print(_yearController.year);
       },
       child: Container(
         height: 100,

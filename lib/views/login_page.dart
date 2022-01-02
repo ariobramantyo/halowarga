@@ -47,7 +47,6 @@ class LoginPage extends StatelessWidget {
         EasyLoading.dismiss();
       }
       EasyLoading.dismiss();
-      print('sukses login');
     }
   }
 

@@ -104,11 +104,6 @@ class _SuratPagePengurusState extends State<SuratPagePengurus>
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        // var documents = snapshot.data!.docs
-                        //     .map((value) => Document.fromSnapshot(value
-                        //         as QueryDocumentSnapshot<Map<String, dynamic>>))
-                        //     .toList();
-
                         return ListSurat(
                           documents: snapshot.data!.docs,
                           role: 'Pengurus',
@@ -125,11 +120,6 @@ class _SuratPagePengurusState extends State<SuratPagePengurus>
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        // var documents = snapshot.data!.docs
-                        //     .map((value) => Document.fromSnapshot(value
-                        //         as QueryDocumentSnapshot<Map<String, dynamic>>))
-                        //     .toList();
-
                         return ListSurat(
                             documents: snapshot.data!.docs, role: 'Pengurus');
                       }

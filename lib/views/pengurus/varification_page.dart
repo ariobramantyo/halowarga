@@ -130,9 +130,6 @@ class _VerificationPageState extends State<VerificationPage> {
                   onCompleted: (v) {
                     print("Completed");
                   },
-                  // onTap: () {
-                  //   print("Pressed");
-                  // },
                   onChanged: (value) {
                     print(value);
                     setState(() {
@@ -174,7 +171,6 @@ class _VerificationPageState extends State<VerificationPage> {
                       hasError = false;
                       EasyLoading.show(status: 'loading...');
                       try {
-                        print('sign up');
                         _userController.roleSignUp.value =
                             Get.arguments['role'];
                         _userController.statusSignUp.value =
@@ -197,7 +193,6 @@ class _VerificationPageState extends State<VerificationPage> {
                         );
                         Navigator.popUntil(context,
                             (Route<dynamic> predicate) => predicate.isFirst);
-                        print('sukses signup');
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           _errorDialog('Invalid Password',

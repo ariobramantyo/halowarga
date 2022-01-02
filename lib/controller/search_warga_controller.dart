@@ -13,7 +13,6 @@ class SearchWargaController extends GetxController {
   void onInit() async {
     super.onInit();
     searchController = TextEditingController();
-    // initializeData();
   }
 
   @override
@@ -34,22 +33,8 @@ class SearchWargaController extends GetxController {
     wargaToDisplay.refresh();
   }
 
-  // Future<List<UserData>> getAllListWarga() async {
-  //   var listWargaSnapshot = await FirebaseFirestore.instance
-  //       .collection('user')
-  //       .where('status', isEqualTo: 'accepted')
-  //       .get();
-
-  //   var listWarga = listWargaSnapshot.docs
-  //       .map((value) => UserData.fromSnapshot(value))
-  //       .toList();
-
-  //   return listWarga;
-  // }
-
   void initializeData(List<UserData> listWarga) async {
     warga.value = List<UserData>.from(listWarga);
     wargaToDisplay.value = List<UserData>.from(listWarga);
-    print('ambil list warga, controller');
   }
 }

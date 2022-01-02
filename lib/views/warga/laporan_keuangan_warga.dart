@@ -96,7 +96,6 @@ class LaporanKeuanganWarga extends StatelessWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    print('banyaknya snapshot ${snapshot.data!.docs.length}');
                     final income = snapshot.data!.docs
                         .where((element) =>
                             element.id != 'totalBalance' &&

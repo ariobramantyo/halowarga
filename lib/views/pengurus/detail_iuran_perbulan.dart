@@ -42,10 +42,8 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
   void _addIncome(UserData user) async {
     // ambil total uang kas RT
     try {
-      print('ambil total balance');
       final totalBalance = await FirestoreService.getTotalBalance();
 
-      print('buat object FinanceReport');
       final financeReport = FinanceReport(
         title: 'Pembayaran ${widget.tabName}, ' + user.name!.toString(),
         income: 50000,
@@ -59,13 +57,13 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
         typeIncome: widget.tabName,
       );
 
-      // print('tambah income ke firestore');
+      // tambah income ke firestore
       FirestoreService.addIncome(financeReport, 'income');
 
-      // print('update total balance di firestore');
+      // update total balance di firestore
       FirestoreService.updateTotalBalance(50000);
 
-      // print('tambah catatan pembayran bulanan user');
+      // tambah catatan pembayran bulanan user
       FirestoreService.addUserMonthlyPayment(financeReport, user.uid!);
     } catch (e) {
       print(e.toString());
@@ -194,7 +192,6 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
                         return StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('financeReport')
-                              // .where('subFinanceReport', isNull: false)
                               .where('month',
                                   isEqualTo: widget.month.substring(0, 3))
                               .where('year', isEqualTo: widget.year)
@@ -202,17 +199,11 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              print('panjang snapshot ' +
-                                  snapshot.data!.docs.length.toString());
-
                               var listLunas = snapshot.data!.docs
                                   .map((value) => FinanceReport.fromSnapshot(
                                       value as QueryDocumentSnapshot<
                                           Map<String, dynamic>>))
                                   .toList();
-
-                              print('panjang listLunas ' +
-                                  listLunas.length.toString());
 
                               bool isDataExist(String value) {
                                 var data = listLunas.where(
@@ -307,7 +298,6 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
                                         ),
                                         OutlinedButton(
                                           onPressed: () async {
-                                            print(data[index].uid);
                                             _addIncome(data[index]);
                                           },
                                           style: OutlinedButton.styleFrom(
@@ -343,7 +333,6 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
                           return StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('financeReport')
-                                // .where('subFinanceReport', isNull: false)
                                 .where('month',
                                     isEqualTo: widget.month.substring(0, 3))
                                 .where('year', isEqualTo: widget.year)
@@ -351,17 +340,11 @@ class _DetailIuranPerbulanState extends State<DetailIuranPerbulan>
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                print('panjang snapshot' +
-                                    snapshot.data!.docs.length.toString());
-
                                 var listLunas = snapshot.data!.docs
                                     .map((value) => FinanceReport.fromSnapshot(
                                         value as QueryDocumentSnapshot<
                                             Map<String, dynamic>>))
                                     .toList();
-
-                                print('panjang listLunas' +
-                                    listLunas.length.toString());
 
                                 bool isDataExist(String value) {
                                   var data = listLunas.where(

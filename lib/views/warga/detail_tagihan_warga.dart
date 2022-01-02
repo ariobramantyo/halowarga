@@ -243,6 +243,7 @@ class _DetailTagihanWargaState extends State<DetailTagihanWarga>
             ),
             Expanded(
                 child: Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: TabBarView(
                 controller: _tabController,
                 children: [

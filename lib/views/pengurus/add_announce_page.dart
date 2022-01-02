@@ -25,7 +25,6 @@ class AddAnnouncePage extends StatelessWidget {
           color: AppColor.black,
         ),
         maxLines: maxLines ?? 1,
-        // textInputAction: TextInputAction.done,
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(fontSize: 13, color: AppColor.secondaryText),
@@ -59,14 +58,12 @@ class AddAnnouncePage extends StatelessWidget {
               onPressed: () {
                 if (_announceCont.subject.text != '' &&
                     _announceCont.desc.text != '') {
-                  print('masuk ke kirim');
                   FirestoreService.addAnnounce(Announcement(
                     title: _announceCont.subject.text,
                     desc: _announceCont.desc.text,
                     date: DateFormat('dd MMM yyyy').format(DateTime.now()),
                     time: DateFormat('kk:mm:ss').format(DateTime.now()),
                   ));
-                  print('selesai kirim');
                   Navigator.pop(context);
                 }
               },

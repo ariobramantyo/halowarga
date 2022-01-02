@@ -45,7 +45,6 @@ class SignUpPage extends StatelessWidget {
       } else {
         EasyLoading.show(status: 'loading...');
         try {
-          print('sign up');
           _userController.roleSignUp.value = _selectedRole;
           _userController.statusSignUp.value =
               _selectedRole == 'Warga' ? 'waiting' : 'accepted';
@@ -66,7 +65,6 @@ class SignUpPage extends StatelessWidget {
                 )),
           );
           Get.back();
-          print('sukses signup');
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             _errorDialog('Invalid Password',
@@ -92,7 +90,6 @@ class SignUpPage extends StatelessWidget {
       {Widget? suffix}) {
     return Container(
       height: 56,
-      // padding: EdgeInsets.symmetric(horizontal: 20),
       child: TextFormField(
         controller: controller,
         textAlignVertical: TextAlignVertical.center,

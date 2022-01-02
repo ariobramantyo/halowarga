@@ -13,8 +13,6 @@ class UserController extends GetxController {
     await FirestoreService.getUserDataFromFirebase(
         FirebaseAuth.instance.currentUser);
 
-    print('masuk onInit userController');
-
     super.onInit();
   }
 }

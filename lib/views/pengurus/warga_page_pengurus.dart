@@ -117,7 +117,6 @@ class WargaPagePengurus extends StatelessWidget {
                   onChanged: (value) {
                     _searchController.inputSearch.value = value.toLowerCase();
                     _searchController.search();
-                    print('search ' + _searchController.inputSearch.value);
                   },
                 ),
               ),

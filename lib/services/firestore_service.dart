@@ -27,17 +27,6 @@ class FirestoreService {
     }
 
     await getUserDataFromFirebase(user);
-
-    // final currentUser =
-    //     await FirebaseFirestore.instance.collection('user').doc(user.uid).get();
-
-    // final currentUserData = currentUser.data() as Map<String, dynamic>;
-
-    // userController.loggedUser.value = UserData(
-    //     name: currentUserData['name'],
-    //     email: currentUserData['email'],
-    //     no: currentUserData['no'],
-    //     imageUrl: currentUserData['imageUrl']);
   }
 
   static Future<void> getUserDataFromFirebase(User? user) async {
@@ -61,10 +50,6 @@ class FirestoreService {
         imageUrl: currentUserData['imageUrl'],
       );
       userController.loggedUser.refresh();
-
-      print(
-          'ambil data user dari firestore ===============================================');
-      print(userController.loggedUser.value);
     }
   }
 
@@ -84,7 +69,6 @@ class FirestoreService {
   }
 
   static void acceptCitizen(String uid, String status, String nama) {
-    print(uid);
     FirebaseFirestore.instance
         .collection('user')
         .doc(uid)
@@ -163,37 +147,27 @@ class FirestoreService {
           .collection('user')
           .doc('totalBalance')
           .set({'totalBalance': 0});
-      print('set total balance');
       return 0;
     }
   }
 
   static Future updateTotalBalance(int value) async {
-    print('ambil total balance function');
     final totalBalance = await FirebaseFirestore.instance
         .collection('financeReport')
         .doc('totalBalance')
         .get();
-    print('selesai ambil total balance');
+
     if (totalBalance.exists) {
-      print('exist');
       await FirebaseFirestore.instance
           .collection('financeReport')
           .doc('totalBalance')
           .update(
               {'totalBalance': (totalBalance['totalBalance'] as int) + value});
-      print('update total balance');
-      print('ini total balance ${totalBalance['totalBalance']}');
-      print((totalBalance['totalBalance'] as int) + value);
-      print(value);
     } else {
-      print('doesnt exist');
       await FirebaseFirestore.instance
           .collection('financeReport')
           .doc('totalBalance')
           .set({'totalBalance': value});
-
-      print('set total balance');
     }
   }
 
@@ -207,14 +181,6 @@ class FirestoreService {
     var listWarga = listWargaSnapshot.docs
         .map((value) => UserData.fromSnapshot(value))
         .toList();
-
-    // print(listWarga.length);
-
-    // List<String> listNamaWarga = [];
-
-    // listWarga.forEach((element) {
-    //   listNamaWarga.add(element.name!);
-    // });
 
     return listWarga;
   }
@@ -274,19 +240,16 @@ class FirestoreService {
   }
 
   static void documentDone(String docId, String id) {
-    print(docId);
     FirebaseFirestore.instance
         .collection('user')
         .doc(id)
         .collection('listDocuments')
         .doc(docId)
         .update({'status': 'Selesai'});
-    print('berhasil update di document');
 
     FirebaseFirestore.instance
         .collection('document')
         .doc(docId)
         .update({'status': 'Selesai'});
-    print('berhasil update di user');
   }
 }
