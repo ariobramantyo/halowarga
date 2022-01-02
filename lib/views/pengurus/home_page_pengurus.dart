@@ -16,6 +16,18 @@ class HomePagePengurus extends StatelessWidget {
 
   final _userController = Get.find<UserController>();
 
+  String _greeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 10 && hour > 4) {
+      return 'Selamat Pagi';
+    } else if (hour < 14 && hour >= 10) {
+      return 'Selamat Siang';
+    } else if (hour < 18 && hour >= 14) {
+      return 'Selamat Sore';
+    }
+    return 'Selamat Malam';
+  }
+
   Widget _menuIcon(Widget nextPage, IconData icon, String title) {
     return GestureDetector(
       onTap: () {
@@ -108,7 +120,7 @@ class HomePagePengurus extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Selamat pagi",
+                        _greeting(),
                         style: TextStyle(
                             color: AppColor.white, fontSize: 11, height: 1),
                       ),

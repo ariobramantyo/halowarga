@@ -78,7 +78,7 @@ class WargaPage extends StatelessWidget {
                 height: 50,
                 child: TextFormField(
                   controller: _searchController.searchController,
-                  textAlignVertical: TextAlignVertical.center,
+                  textAlignVertical: TextAlignVertical.bottom,
                   style: TextStyle(
                     fontSize: 13,
                     color: AppColor.black,
