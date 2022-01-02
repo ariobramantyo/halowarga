@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:halowarga/const/colors.dart';
+import 'package:halowarga/controller/search_warga_controller.dart';
 import 'package:halowarga/model/user.dart';
 import 'package:halowarga/views/widget/card_person.dart';
 
 class WargaPage extends StatelessWidget {
   WargaPage({Key? key}) : super(key: key);
 
-  final TextEditingController _searchController = TextEditingController();
+  final _searchController = Get.put(SearchWargaController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,59 +58,75 @@ class WargaPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20),
               color: AppColor.white,
               alignment: Alignment.bottomCenter,
-              child: TextFormField(
-                controller: _searchController,
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColor.black,
+              child: Container(
+                height: 50,
+                child: TextFormField(
+                  controller: _searchController.searchController,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColor.black,
+                  ),
+                  decoration: InputDecoration(
+                      hintText: 'Cari Warga..',
+                      hintStyle: TextStyle(
+                          fontSize: 13, color: AppColor.secondaryText),
+                      filled: true,
+                      fillColor: AppColor.placeholder,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: AppColor.secondaryText,
+                        size: 24,
+                      )),
+                  onChanged: (value) {
+                    _searchController.inputSearch.value = value.toLowerCase();
+                    _searchController.search();
+                    print('search ' + _searchController.inputSearch.value);
+                  },
                 ),
-                decoration: InputDecoration(
-                    hintText: 'Cari Warga..',
-                    hintStyle:
-                        TextStyle(fontSize: 13, color: AppColor.secondaryText),
-                    filled: true,
-                    fillColor: AppColor.placeholder,
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10)),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: AppColor.secondaryText,
-                      size: 24,
-                    )),
               ),
             ),
             Expanded(
                 child: Container(
-              padding: EdgeInsets.all(20),
               color: AppColor.white,
+              padding: EdgeInsets.all(20),
               child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('user')
-                      .where('status', isEqualTo: 'accepted')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          var _warga = UserData.fromSnapshot(snapshot
-                                  .data!.docs[index]
-                              as QueryDocumentSnapshot<Map<String, dynamic>>);
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .where('status', isEqualTo: 'accepted')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var listWarga = snapshot.data!.docs
+                        .map((warga) => UserData.fromSnapshot(warga
+                            as QueryDocumentSnapshot<Map<String, dynamic>>))
+                        .toList();
 
-                          return CardPerson(
-                            name: _warga.name!,
-                            address: _warga.address!,
-                            imageUrl: _warga.imageUrl,
-                            role: _warga.role!,
-                          );
-                        },
-                      );
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  }),
+                    _searchController.initializeData(listWarga);
+
+                    return Obx(() => ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          itemCount: _searchController.wargaToDisplay.length,
+                          itemBuilder: (context, index) {
+                            return CardPerson(
+                              name:
+                                  _searchController.wargaToDisplay[index].name!,
+                              address: _searchController
+                                  .wargaToDisplay[index].address!,
+                              imageUrl: _searchController
+                                  .wargaToDisplay[index].imageUrl,
+                              role:
+                                  _searchController.wargaToDisplay[index].role!,
+                            );
+                          },
+                        ));
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
             ))
           ],
         )));
