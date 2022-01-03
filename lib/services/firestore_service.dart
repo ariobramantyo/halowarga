@@ -144,7 +144,7 @@ class FirestoreService {
       return totalBalance['totalBalance'];
     } else {
       await FirebaseFirestore.instance
-          .collection('user')
+          .collection('financeReport')
           .doc('totalBalance')
           .set({'totalBalance': 0});
       return 0;
